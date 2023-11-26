@@ -1,4 +1,5 @@
-const HttpError = require("./HttpError");
-const NewId = require("./NewId");
+const HttpError = require('./HttpError');
+const ctrlWrapper = require('./ctrlWrapper');
+const NewId = require('./NewId');
 
-module.exports = { HttpError, NewId };
+module.exports = { HttpError, ctrlWrapper, NewId };
