@@ -1,6 +1,3 @@
-// User: mirasovdev
-// Password: HMshm0YPQPhvnQ1W
-
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');

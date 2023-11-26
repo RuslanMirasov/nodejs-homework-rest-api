@@ -1,28 +1,14 @@
 const express = require('express');
-// const Joi = require('joi');
-
-// const contacts = require('../../models/contacts');
-
-// const { HttpError } = require('../../helpers');
-
 const ctrl = require('../../controllers/contacts');
-
+const { validateBody, isValidId } = require('../../middlewares');
+const { schemas } = require('../../models/contact');
 const router = express.Router();
 
-// const addSchema = Joi.object({
-//   name: Joi.string().required().messages({ 'any.required': 'missing required name field' }),
-//   email: Joi.string().required().messages({ 'any.required': 'missing required email field' }),
-//   phone: Joi.string().required().messages({ 'any.required': 'missing required phone field' }),
-// });
-
 router.get('/', ctrl.getAll);
-
-router.get('/:contactId', ctrl.getById);
-
-router.post('/', ctrl.add);
-
-router.delete('/:contactId', ctrl.deleteById);
-
-router.put('/:contactId', ctrl.updateById);
+router.get('/:contactId', isValidId, ctrl.getById);
+router.post('/', validateBody(schemas.addSchema), ctrl.add);
+router.put('/:contactId', isValidId, validateBody(schemas.addSchema), ctrl.updateById);
+router.patch('/:contactId/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite);
+router.delete('/:contactId', isValidId, ctrl.deleteById);
 
 module.exports = router;
