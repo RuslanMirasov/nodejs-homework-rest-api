@@ -18,6 +18,12 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
+  const { email } = req.body;
+  const contact = await Contact.findOne({ email });
+  if (contact) {
+    console.log(email);
+    throw HttpError(409, 'Contact with such Email already in use!');
+  }
   const { _id: owner } = req.user;
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
@@ -30,7 +36,7 @@ const updateById = async (req, res) => {
   }
   const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
   if (!result) {
-    throw HttpError(404, 'Not found');
+    throw HttpError(404, 'Contact not found!');
   }
   res.json(result);
 };
