@@ -63,9 +63,9 @@ const errorMessageList = {
 };
 
 const HttpError = (status, message = errorMessageList[status]) => {
-  const error = new Error(message);
-  error.status = Number(status);
-  return error;
+  const newError = new Error(message);
+  newError.status = status;
+  throw newError;
 };
 
 module.exports = HttpError;
