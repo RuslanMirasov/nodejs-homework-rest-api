@@ -6,11 +6,6 @@ const { SECRET_KEY } = process.env;
 
 const { ctrlWrapper, HttpError } = require('../helpers');
 
-const getAll = async (req, res) => {
-  const result = await User.find({}, '-createdAt -updatedAt');
-  res.json(result);
-};
-
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -73,7 +68,6 @@ const logout = async (req, res) => {
 };
 
 module.exports = {
-  getAll: ctrlWrapper(getAll),
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
