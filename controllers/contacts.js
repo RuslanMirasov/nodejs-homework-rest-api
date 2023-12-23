@@ -21,7 +21,6 @@ const add = async (req, res) => {
   const { email } = req.body;
   const contact = await Contact.findOne({ email });
   if (contact) {
-    console.log(email);
     throw HttpError(409, 'Contact with such Email already in use!');
   }
   const { _id: owner } = req.user;
