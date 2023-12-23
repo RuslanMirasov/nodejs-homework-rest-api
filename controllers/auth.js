@@ -7,8 +7,8 @@ const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 const fs = require('fs/promises');
 
 require('dotenv').config();
-const { SECRET_KEY } = process.env;
-const { ctrlWrapper, HttpError } = require('../helpers');
+const { SECRET_KEY, BASE_URL } = process.env;
+const { ctrlWrapper, HttpError, nanoId, sendEmail } = require('../helpers');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -18,7 +18,17 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarUrl = gravatar.url(email);
-  const newUser = await User.create({ ...req.body, password: hashPassword, avatarUrl });
+  const verifycationCode = nanoId();
+
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarUrl, verifycationCode });
+  const verifyEmail = {
+    to: email,
+    subject: 'Verify email',
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verifycationCode}">Click verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     user: {
       email: newUser.email,
